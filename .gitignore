@@ -67,3 +67,5 @@ docker-data/dms/mail-state/
 
 .DS_Store
 Thumbs.db
+# Docker runtime data
+docker-data/
