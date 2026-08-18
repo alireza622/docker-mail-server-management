@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ورود به پنل مدیریت Mail Server</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family:
+                Tahoma,
+                Arial,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0f172a,
+                    #1e293b,
+                    #334155
+                );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #1f2937;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: #ffffff;
+
+            border-radius: 18px;
+
+            padding: 38px 35px;
+
+            box-shadow:
+                0 25px 60px
+                rgba(0, 0, 0, 0.30);
+        }
+
+        .logo {
+            width: 72px;
+            height: 72px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 18px;
+
+            background: #2563eb;
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 32px;
+
+            box-shadow:
+                0 10px 25px
+                rgba(37, 99, 235, 0.35);
+        }
+
+        h1 {
+            text-align: center;
+
+            margin: 0;
+
+            font-size: 23px;
+
+            color: #111827;
+        }
+
+        .subtitle {
+            text-align: center;
+
+            margin-top: 10px;
+            margin-bottom: 30px;
+
+            color: #6b7280;
+
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            color: #374151;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 9px;
+
+            outline: none;
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(37, 99, 235, 0.12);
+        }
+
+        .login-button {
+            width: 100%;
+
+            border: none;
+
+            border-radius: 9px;
+
+            padding: 13px;
+
+            background: #2563eb;
+
+            color: white;
+
+            font-family: inherit;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .login-button:hover {
+            background: #1d4ed8;
+
+            transform: translateY(-1px);
+        }
+
+        .error {
+            background: #fee2e2;
+
+            color: #991b1b;
+
+            border: 1px solid #fecaca;
+
+            border-radius: 8px;
+
+            padding: 11px 13px;
+
+            margin-bottom: 20px;
+
+            font-size: 13px;
+        }
+
+        .footer {
+            text-align: center;
+
+            margin-top: 25px;
+
+            font-size: 12px;
+
+            color: #9ca3af;
+        }
+
+        @media (max-width: 480px) {
+
+            .login-card {
+                padding: 30px 22px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="login-wrapper">
+
+    <div class="login-card">
+
+        <div class="logo">
+            ✉
+        </div>
+
+        <h1>
+            Mail Server
+        </h1>
+
+        <div class="subtitle">
+            پنل مدیریت سیستم ایمیل
+        </div>
+
+
+        {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        <form
+            method="POST"
+            action="{{ url_for('login') }}"
+        >
+
+            <div class="form-group">
+
+                <label for="username">
+                    نام کاربری
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="نام کاربری مدیر"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    رمز عبور
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="رمز عبور"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-button"
+            >
+                ورود به پنل مدیریت
+            </button>
+
+        </form>
+
+
+        <div class="footer">
+            Mail Server Management Panel
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

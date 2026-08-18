@@ -1,0 +1,51 @@
+services:
+
+  mailserver:
+    image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    container_name: mailserver
+    hostname: mail
+    domainname: example.com
+
+    ports:
+      - "2525:25"
+      - "587:587"
+      - "993:993"
+
+    environment:
+      ENABLE_IMAP: "1"
+      ENABLE_POP3: "0"
+      ENABLE_CLAMAV: "0"
+      ENABLE_FAIL2BAN: "0"
+ 
+      PERMIT_DOCKER: "connected-networks"
+      POSTFIX_INET_PROTOCOLS: "ipv4"
+      SPOOF_PROTECTION: "0"
+
+    volumes:
+      - ./docker-data/dms/mail-data:/var/mail
+      - mailserver_mail-state:/var/mail-state
+      - ./docker-data/dms/mail-logs:/var/log/mail
+      - ./docker-data/dms/config:/tmp/docker-mailserver
+
+    restart: unless-stopped
+
+
+  roundcube:
+    image: roundcube/roundcubemail:latest
+    container_name: roundcube
+    depends_on:
+      - mailserver
+
+    ports:
+      - "8000:80"
+
+    environment:
+      ROUNDCUBEMAIL_DEFAULT_HOST: mailserver
+      ROUNDCUBEMAIL_DEFAULT_PORT: 143
+      ROUNDCUBEMAIL_SMTP_SERVER: mailserver
+      ROUNDCUBEMAIL_SMTP_PORT: 587
+
+    restart: unless-stopped
+volumes:
+  mailserver_mail-state:
+    external: true

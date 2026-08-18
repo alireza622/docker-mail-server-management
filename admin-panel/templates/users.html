@@ -1,0 +1,759 @@
+```html
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>مدیریت کاربران ایمیل</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background: #f3f6fa;
+            color: #1f2937;
+        }
+
+        .container {
+            width: 96%;
+            max-width: 1500px;
+            margin: 30px auto;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #111827, #1f3a5f);
+            color: white;
+            padding: 28px 30px;
+            border-radius: 16px;
+            margin-bottom: 22px;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.12);
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 0;
+            color: #dbeafe;
+            font-size: 14px;
+        }
+
+        /* Top actions */
+        .top-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 9px 15px;
+            min-height: 38px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: bold;
+            transition: 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(0.96);
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #d97706;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #475569;
+            color: white;
+        }
+
+        /* Messages */
+        .error,
+        .success {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-right: 5px solid #dc2626;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+            border-right: 5px solid #16a34a;
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 5px 20px rgba(15, 23, 42, 0.08);
+            overflow-x: auto;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 1100px;
+        }
+
+        th {
+            background: #172033;
+            color: white;
+            padding: 14px 10px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        th:first-child {
+            border-top-right-radius: 10px;
+        }
+
+        th:last-child {
+            border-top-left-radius: 10px;
+        }
+
+        td {
+            padding: 14px 10px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 13px;
+        }
+
+        tbody tr {
+            transition: 0.15s ease;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .email {
+            color: #1d4ed8;
+            font-weight: bold;
+            direction: ltr;
+            display: inline-block;
+        }
+
+        /* Forms */
+        form {
+            margin: 0;
+        }
+
+        input,
+        select {
+            height: 36px;
+            padding: 7px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            background: white;
+            font-family: inherit;
+            font-size: 12px;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+        input[type="number"] {
+            width: 75px;
+        }
+
+        input[type="password"] {
+            width: 125px;
+        }
+
+        select {
+            width: 70px;
+        }
+
+        /* Quota */
+        .quota {
+            min-width: 180px;
+        }
+
+        .quota-info {
+            font-size: 12px;
+            color: #475569;
+            margin-bottom: 5px;
+        }
+
+        .quota-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 7px;
+        }
+
+        .quota-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #60a5fa);
+            border-radius: 20px;
+            transition: width 0.3s ease;
+        }
+
+        .quota-percent {
+            display: block;
+            margin-top: 5px;
+            color: #64748b;
+            font-size: 11px;
+        }
+
+        /* Form groups */
+        .quota-form,
+        .password-form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .actions .btn {
+            min-width: 90px;
+            font-size: 11px;
+            padding: 8px 10px;
+        }
+
+        /* Empty */
+        .empty {
+            text-align: center;
+            padding: 70px 20px;
+            color: #64748b;
+        }
+
+        .empty-icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .empty h2 {
+            margin: 0 0 10px 0;
+            color: #334155;
+        }
+
+        .empty p {
+            margin-bottom: 25px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 18px;
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+
+            .container {
+                width: 94%;
+                margin: 15px auto;
+            }
+
+            .header {
+                padding: 22px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .card {
+                padding: 12px;
+            }
+
+            .top-actions {
+                gap: 7px;
+            }
+
+            .btn {
+                font-size: 12px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+
+        <h1>📧 مدیریت کاربران ایمیل</h1>
+
+        <p>
+            مدیریت کاربران، حجم صندوق، رمز عبور و دسترسی ارسال و دریافت ایمیل
+        </p>
+
+    </div>
+
+
+    <!-- Top Actions -->
+    <div class="top-actions">
+
+        <a href="{{ url_for('dashboard') }}"
+           class="btn btn-secondary">
+            🏠 داشبورد
+        </a>
+
+        <a href="{{ url_for('add_user_page') }}"
+           class="btn btn-primary">
+            ➕ افزودن کاربر
+        </a>
+
+        <a href="{{ url_for('logout') }}"
+           class="btn btn-danger">
+            🚪 خروج
+        </a>
+
+    </div>
+
+
+    <!-- Error -->
+    {% if error %}
+
+    <div class="error">
+        ❌ {{ error }}
+    </div>
+
+    {% endif %}
+
+
+    <!-- Users Card -->
+    <div class="card">
+
+        {% if users %}
+
+        <table>
+
+            <thead>
+
+            <tr>
+
+                <th>📧 ایمیل</th>
+
+                <th>💾 مصرف صندوق</th>
+
+                <th>📦 تغییر حجم</th>
+
+                <th>🔑 تغییر رمز</th>
+
+                <th>📤 ارسال</th>
+
+                <th>📥 دریافت</th>
+
+                <th>🗑️ حذف</th>
+
+            </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for user in users %}
+
+            <tr>
+
+                <!-- Email -->
+                <td>
+
+                    <span class="email">
+                        {{ user.email }}
+                    </span>
+
+                </td>
+
+
+                <!-- Quota -->
+                <td class="quota">
+
+                    {% if user.quota %}
+
+                        {% if user.quota.limit_mb is not none %}
+
+                            <div class="quota-info">
+
+                                {{ user.quota.used_mb }} MB
+                                /
+                                {{ user.quota.limit_mb }} MB
+
+                            </div>
+
+                            <div class="quota-bar">
+
+                                <div
+                                    class="quota-fill"
+                                    style="width: {{ user.quota.percentage }}%;">
+                                </div>
+
+                            </div>
+
+                            <span class="quota-percent">
+
+                                {{ user.quota.percentage }}% مصرف شده
+
+                            </span>
+
+                        {% else %}
+
+                            <div class="quota-info">
+
+                                {{ user.quota.used_mb }} MB
+                                /
+                                نامحدود
+
+                            </div>
+
+                        {% endif %}
+
+                    {% else %}
+
+                        نامشخص
+
+                    {% endif %}
+
+                </td>
+
+
+                <!-- Change Quota -->
+                <td>
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('quota_user') }}"
+                        class="quota-form">
+
+                        <input
+                            type="hidden"
+                            name="email"
+                            value="{{ user.email }}">
+
+                        <input
+                            type="number"
+                            name="quota"
+                            min="1"
+                            placeholder="حجم">
+
+                        <select name="quota_unit">
+
+                            <option value="M">
+                                MB
+                            </option>
+
+                            <option value="G">
+                                GB
+                            </option>
+
+                        </select>
+
+                        <button
+                            type="submit"
+                            class="btn btn-success">
+
+                            ذخیره
+
+                        </button>
+
+                    </form>
+
+                </td>
+
+
+                <!-- Change Password -->
+                <td>
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('change_password') }}"
+                        class="password-form">
+
+                        <input
+                            type="hidden"
+                            name="email"
+                            value="{{ user.email }}">
+
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="رمز جدید"
+                            required>
+
+                        <button
+                            type="submit"
+                            class="btn btn-warning">
+
+                            تغییر
+
+                        </button>
+
+                    </form>
+
+                </td>
+
+
+                <!-- Send -->
+                <td>
+
+                    <div class="actions">
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('user_send') }}">
+
+                            <input
+                                type="hidden"
+                                name="email"
+                                value="{{ user.email }}">
+
+                            <input
+                                type="hidden"
+                                name="action"
+                                value="disable">
+
+                            <button
+                                type="submit"
+                                class="btn btn-danger">
+
+                                قطع ارسال
+
+                            </button>
+
+                        </form>
+
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('user_send') }}">
+
+                            <input
+                                type="hidden"
+                                name="email"
+                                value="{{ user.email }}">
+
+                            <input
+                                type="hidden"
+                                name="action"
+                                value="enable">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success">
+
+                                فعال کردن
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </td>
+
+
+                <!-- Receive -->
+                <td>
+
+                    <div class="actions">
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('user_receive') }}">
+
+                            <input
+                                type="hidden"
+                                name="email"
+                                value="{{ user.email }}">
+
+                            <input
+                                type="hidden"
+                                name="action"
+                                value="disable">
+
+                            <button
+                                type="submit"
+                                class="btn btn-danger">
+
+                                قطع دریافت
+
+                            </button>
+
+                        </form>
+
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('user_receive') }}">
+
+                            <input
+                                type="hidden"
+                                name="email"
+                                value="{{ user.email }}">
+
+                            <input
+                                type="hidden"
+                                name="action"
+                                value="enable">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success">
+
+                                فعال کردن
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </td>
+
+
+                <!-- Delete -->
+                <td>
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('delete_user_page') }}"
+                        onsubmit="return confirm('آیا از حذف این کاربر مطمئن هستید؟');">
+
+                        <input
+                            type="hidden"
+                            name="email"
+                            value="{{ user.email }}">
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger">
+
+                            🗑️ حذف
+
+                        </button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        {% else %}
+
+        <!-- Empty State -->
+        <div class="empty">
+
+            <div class="empty-icon">
+                📭
+            </div>
+
+            <h2>
+                کاربری پیدا نشد
+            </h2>
+
+            <p>
+                هنوز کاربری در Mail Server ایجاد نشده است.
+            </p>
+
+            <a
+                href="{{ url_for('add_user_page') }}"
+                class="btn btn-primary">
+
+                ➕ ایجاد اولین کاربر
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="footer">
+
+        Mail Server Administration Panel
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
+```

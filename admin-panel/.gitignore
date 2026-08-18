@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Flask
+instance/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Backups
+*.backup
+*.bak
+
+# Logs
+*.log
+docker-data/dms/mail-logs/
+
+# Mail data
+docker-data/dms/mail-data/
+
+# Docker generated state
+docker-data/dms/mail-state/
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

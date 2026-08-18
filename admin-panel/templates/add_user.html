@@ -1,0 +1,1180 @@
+```html
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ایجاد کاربر جدید - Mail Server</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #16a34a;
+            --success-dark: #15803d;
+            --danger: #dc2626;
+            --dark: #111827;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #d1d5db;
+            --background: #f3f6fa;
+            --card: #ffffff;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Tahoma,
+                Arial,
+                sans-serif;
+
+            background: var(--background);
+
+            color: var(--text);
+        }
+
+        /* =========================
+           Header
+        ========================= */
+
+        .header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #111827,
+                    #1f2937
+                );
+
+            color: white;
+
+            padding: 18px 35px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,.12);
+        }
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .brand-icon {
+
+            width: 42px;
+
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                rgba(255,255,255,.12);
+
+            border-radius: 10px;
+
+            font-size: 21px;
+        }
+
+        .brand h1 {
+
+            margin: 0;
+
+            font-size: 20px;
+        }
+
+        .brand small {
+
+            display: block;
+
+            margin-top: 4px;
+
+            color: #cbd5e1;
+
+            font-size: 12px;
+        }
+
+        .header-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .admin-badge {
+
+            background:
+                rgba(255,255,255,.10);
+
+            border:
+                1px solid rgba(255,255,255,.12);
+
+            padding: 8px 13px;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+        }
+
+        .logout {
+
+            color: white;
+
+            text-decoration: none;
+
+            background: var(--danger);
+
+            padding: 9px 15px;
+
+            border-radius: 7px;
+
+            font-size: 13px;
+
+            transition: .2s;
+        }
+
+        .logout:hover {
+
+            background: #b91c1c;
+        }
+
+        /* =========================
+           Container
+        ========================= */
+
+        .container {
+
+            max-width: 900px;
+
+            margin: 35px auto;
+
+            padding: 0 20px;
+        }
+
+        /* =========================
+           Page title
+        ========================= */
+
+        .page-title {
+
+            margin-bottom: 22px;
+        }
+
+        .page-title h2 {
+
+            margin: 0 0 8px;
+
+            font-size: 25px;
+
+            color: var(--dark);
+        }
+
+        .page-title p {
+
+            margin: 0;
+
+            color: var(--muted);
+
+            font-size: 14px;
+        }
+
+        /* =========================
+           Alerts
+        ========================= */
+
+        .alert {
+
+            padding: 15px 18px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            font-size: 14px;
+
+            line-height: 1.8;
+        }
+
+        .alert-error {
+
+            background: #fef2f2;
+
+            color: #991b1b;
+
+            border:
+                1px solid #fecaca;
+        }
+
+        .alert-success {
+
+            background: #f0fdf4;
+
+            color: #166534;
+
+            border:
+                1px solid #bbf7d0;
+        }
+
+        /* =========================
+           Card
+        ========================= */
+
+        .card {
+
+            background: var(--card);
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            padding: 28px;
+
+            box-shadow:
+                0 4px 14px rgba(0,0,0,.06);
+        }
+
+        .card-header {
+
+            padding-bottom: 20px;
+
+            margin-bottom: 25px;
+
+            border-bottom:
+                1px solid #edf0f3;
+        }
+
+        .card-header h3 {
+
+            margin: 0 0 7px;
+
+            font-size: 18px;
+
+            color: var(--dark);
+        }
+
+        .card-header p {
+
+            margin: 0;
+
+            color: var(--muted);
+
+            font-size: 13px;
+        }
+
+        /* =========================
+           Form
+        ========================= */
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 20px;
+        }
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+        .form-group.full {
+
+            grid-column: 1 / -1;
+        }
+
+        label {
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            color: #374151;
+        }
+
+        .required {
+
+            color: var(--danger);
+
+            margin-right: 3px;
+        }
+
+        input,
+        select {
+
+            width: 100%;
+
+            height: 44px;
+
+            padding: 0 12px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 8px;
+
+            background: white;
+
+            color: var(--text);
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition:
+                border-color .2s,
+                box-shadow .2s;
+        }
+
+        input:focus,
+        select:focus {
+
+            border-color: var(--primary);
+
+            box-shadow:
+                0 0 0 3px rgba(37,99,235,.10);
+        }
+
+        .help {
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            line-height: 1.7;
+        }
+
+        /* =========================
+           Password
+        ========================= */
+
+        .password-wrapper {
+
+            position: relative;
+        }
+
+        .password-wrapper input {
+
+            padding-left: 70px;
+        }
+
+        .password-toggle {
+
+            position: absolute;
+
+            left: 7px;
+
+            top: 5px;
+
+            height: 34px;
+
+            padding: 0 10px;
+
+            border: none;
+
+            background: #f3f4f6;
+
+            color: #4b5563;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            font-family: inherit;
+
+            font-size: 11px;
+        }
+
+        .password-toggle:hover {
+
+            background: #e5e7eb;
+        }
+
+        /* =========================
+           Quota
+        ========================= */
+
+        .quota-row {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 130px;
+
+            gap: 10px;
+        }
+
+        /* =========================
+           Permission Box
+        ========================= */
+
+        .permissions {
+
+            margin-top: 25px;
+
+            padding: 18px;
+
+            background: #f8fafc;
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 10px;
+        }
+
+        .permissions-title {
+
+            margin-bottom: 15px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            color: var(--dark);
+        }
+
+        .permission-list {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 12px;
+        }
+
+        .permission {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            background: white;
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 8px;
+
+            padding: 13px;
+
+            cursor: pointer;
+        }
+
+        .permission:hover {
+
+            border-color: #bfdbfe;
+        }
+
+        .permission input {
+
+            width: 18px;
+
+            height: 18px;
+
+            margin: 0;
+
+            accent-color: var(--primary);
+
+            cursor: pointer;
+        }
+
+        .permission-content {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 3px;
+        }
+
+        .permission-name {
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            color: var(--dark);
+        }
+
+        .permission-description {
+
+            font-size: 11px;
+
+            color: var(--muted);
+        }
+
+        /* =========================
+           Buttons
+        ========================= */
+
+        .form-actions {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-top: 28px;
+
+            padding-top: 22px;
+
+            border-top:
+                1px solid #edf0f3;
+        }
+
+        .button-group {
+
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+        .button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+
+            min-height: 42px;
+
+            padding: 0 18px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            font-family: inherit;
+
+            font-size: 13px;
+
+            transition:
+                background .2s,
+                transform .2s;
+        }
+
+        .button:hover {
+
+            transform: translateY(-1px);
+        }
+
+        .button-primary {
+
+            background: var(--primary);
+
+            color: white;
+        }
+
+        .button-primary:hover {
+
+            background: var(--primary-dark);
+        }
+
+        .button-secondary {
+
+            background: #6b7280;
+
+            color: white;
+        }
+
+        .button-secondary:hover {
+
+            background: #4b5563;
+        }
+
+        .button-light {
+
+            background: #f3f4f6;
+
+            color: #374151;
+
+            border:
+                1px solid #e5e7eb;
+        }
+
+        .button-light:hover {
+
+            background: #e5e7eb;
+        }
+
+        /* =========================
+           Footer
+        ========================= */
+
+        .footer {
+
+            text-align: center;
+
+            color: #9ca3af;
+
+            font-size: 11px;
+
+            padding: 20px 0;
+        }
+
+        /* =========================
+           Responsive
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .header {
+
+                padding: 15px 18px;
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .header-right {
+
+                width: 100%;
+
+                justify-content: space-between;
+            }
+
+            .container {
+
+                margin-top: 20px;
+
+                padding: 0 12px;
+            }
+
+            .page-title h2 {
+
+                font-size: 21px;
+            }
+
+            .card {
+
+                padding: 20px;
+            }
+
+            .form-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+
+                grid-column: auto;
+            }
+
+            .permission-list {
+
+                grid-template-columns: 1fr;
+            }
+
+            .quota-row {
+
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+
+                flex-direction: column-reverse;
+
+                align-items: stretch;
+            }
+
+            .button-group {
+
+                width: 100%;
+            }
+
+            .button {
+
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     Header
+========================= -->
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            ✉️
+        </div>
+
+        <div>
+
+            <h1>
+                مدیریت Mail Server
+            </h1>
+
+            <small>
+                سامانه مدیریت کاربران و سرویس ایمیل
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-right">
+
+        <div class="admin-badge">
+
+            👤
+            مدیر سیستم
+
+        </div>
+
+
+        <a
+            href="{{ url_for('logout') }}"
+            class="logout"
+        >
+            خروج
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- =========================
+     Main
+========================= -->
+
+<main class="container">
+
+
+    <div class="page-title">
+
+        <h2>
+            ایجاد کاربر جدید
+        </h2>
+
+        <p>
+            ایجاد حساب ایمیل جدید و تعیین تنظیمات صندوق پستی
+        </p>
+
+    </div>
+
+
+    <!-- Error -->
+
+    {% if error %}
+
+    <div class="alert alert-error">
+
+        ❌
+
+        {{ error }}
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- Success -->
+
+    {% if success %}
+
+    <div class="alert alert-success">
+
+        ✅
+
+        {{ success }}
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =========================
+         Form Card
+    ========================= -->
+
+    <div class="card">
+
+
+        <div class="card-header">
+
+            <h3>
+                اطلاعات کاربر
+            </h3>
+
+            <p>
+                اطلاعات زیر را وارد کنید تا حساب ایمیل ایجاد شود.
+            </p>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{{ url_for('add_user_page') }}"
+        >
+
+
+            <div class="form-grid">
+
+
+                <!-- Email -->
+
+                <div class="form-group full">
+
+                    <label for="email">
+
+                        آدرس ایمیل
+
+                        <span class="required">*</span>
+
+                    </label>
+
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="user@example.com"
+                        autocomplete="email"
+                        required
+                    >
+
+
+                    <div class="help">
+
+                        آدرس کامل ایمیل کاربر را وارد کنید.
+
+                    </div>
+
+                </div>
+
+
+                <!-- Password -->
+
+                <div class="form-group">
+
+                    <label for="password">
+
+                        رمز عبور
+
+                        <span class="required">*</span>
+
+                    </label>
+
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="رمز عبور"
+                            autocomplete="new-password"
+                            required
+                        >
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword()"
+                        >
+                            نمایش
+                        </button>
+
+                    </div>
+
+
+                    <div class="help">
+
+                        یک رمز عبور مناسب و غیرقابل حدس انتخاب کنید.
+
+                    </div>
+
+                </div>
+
+
+                <!-- Quota -->
+
+                <div class="form-group">
+
+                    <label for="quota">
+
+                        حجم صندوق پستی
+
+                    </label>
+
+
+                    <div class="quota-row">
+
+                        <input
+                            type="number"
+                            id="quota"
+                            name="quota"
+                            min="1"
+                            placeholder="مثلاً 500"
+                        >
+
+
+                        <select
+                            name="quota_unit"
+                            id="quota_unit"
+                        >
+
+                            <option value="M">
+                                مگابایت (MB)
+                            </option>
+
+                            <option value="G">
+                                گیگابایت (GB)
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="help">
+
+                        در صورت خالی گذاشتن، حجم نامحدود خواهد بود.
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =========================
+                 Permissions
+            ========================= -->
+
+            <div class="permissions">
+
+
+                <div class="permissions-title">
+
+                    دسترسی‌های کاربر
+
+                </div>
+
+
+                <div class="permission-list">
+
+
+                    <!-- Receive -->
+
+                    <label class="permission">
+
+                        <input
+                            type="checkbox"
+                            name="receive"
+                            value="1"
+                            checked
+                        >
+
+
+                        <span class="permission-content">
+
+                            <span class="permission-name">
+                                📥 دریافت ایمیل
+                            </span>
+
+                            <span class="permission-description">
+                                کاربر بتواند ایمیل دریافت کند.
+                            </span>
+
+                        </span>
+
+                    </label>
+
+
+                    <!-- Send -->
+
+                    <label class="permission">
+
+                        <input
+                            type="checkbox"
+                            name="send"
+                            value="1"
+                            checked
+                        >
+
+
+                        <span class="permission-content">
+
+                            <span class="permission-name">
+                                📤 ارسال ایمیل
+                            </span>
+
+                            <span class="permission-description">
+                                کاربر بتواند ایمیل ارسال کند.
+                            </span>
+
+                        </span>
+
+                    </label>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 Actions
+            ========================= -->
+
+            <div class="form-actions">
+
+
+                <div class="button-group">
+
+                    <a
+                        href="{{ url_for('users') }}"
+                        class="button button-secondary"
+                    >
+                        ← بازگشت به کاربران
+                    </a>
+
+                </div>
+
+
+                <div class="button-group">
+
+                    <button
+                        type="reset"
+                        class="button button-light"
+                    >
+                        پاک کردن فرم
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="button button-primary"
+                    >
+                        ➕ ایجاد کاربر
+                    </button>
+
+                </div>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+    <div class="footer">
+
+        Mail Server Administration Panel
+
+    </div>
+
+
+</main>
+
+
+<script>
+
+    function togglePassword() {
+
+        const password =
+            document.getElementById("password");
+
+        const button =
+            document.querySelector(".password-toggle");
+
+
+        if (password.type === "password") {
+
+            password.type = "text";
+
+            button.textContent = "مخفی";
+
+        } else {
+
+            password.type = "password";
+
+            button.textContent = "نمایش";
+
+        }
+
+    }
+
+</script>
+
+
+</body>
+
+</html>
+```

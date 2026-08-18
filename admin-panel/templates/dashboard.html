@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>داشبورد مدیریت Mail Server</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #16a34a;
+            --success-dark: #15803d;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --dark: #111827;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --background: #f3f6fa;
+            --card: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        /* =========================
+           Header
+        ========================= */
+
+        .header {
+            background: linear-gradient(
+                135deg,
+                #111827,
+                #1f2937
+            );
+
+            color: white;
+
+            padding: 18px 35px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,.12);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: rgba(255,255,255,.12);
+
+            border-radius: 10px;
+
+            font-size: 22px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .brand small {
+            display: block;
+            margin-top: 4px;
+            color: #cbd5e1;
+            font-size: 12px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .admin-badge {
+            background: rgba(255,255,255,.10);
+            border: 1px solid rgba(255,255,255,.12);
+
+            padding: 8px 13px;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+        }
+
+        .logout {
+            text-decoration: none;
+            color: white;
+
+            background: var(--danger);
+
+            padding: 9px 15px;
+
+            border-radius: 7px;
+
+            font-size: 13px;
+
+            transition: .2s;
+        }
+
+        .logout:hover {
+            background: #b91c1c;
+        }
+
+        /* =========================
+           Container
+        ========================= */
+
+        .container {
+            max-width: 1450px;
+
+            margin: 30px auto;
+
+            padding: 0 22px;
+        }
+
+        /* =========================
+           Page title
+        ========================= */
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h2 {
+            margin: 0 0 8px;
+
+            font-size: 25px;
+
+            color: var(--dark);
+        }
+
+        .page-title p {
+            margin: 0;
+
+            color: var(--muted);
+
+            font-size: 14px;
+        }
+
+        /* =========================
+           Error
+        ========================= */
+
+        .error {
+            background: #fef2f2;
+
+            color: #991b1b;
+
+            border: 1px solid #fecaca;
+
+            padding: 15px 18px;
+
+            border-radius: 10px;
+
+            margin-bottom: 22px;
+
+            font-size: 14px;
+        }
+
+        /* =========================
+           Status Cards
+        ========================= */
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(210px, 1fr));
+
+            gap: 17px;
+
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: 13px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,.055);
+
+            transition:
+                transform .2s,
+                box-shadow .2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 7px 18px rgba(0,0,0,.08);
+        }
+
+        .card-title {
+            color: var(--muted);
+
+            font-size: 13px;
+
+            margin-bottom: 14px;
+        }
+
+        .card-value {
+            font-size: 27px;
+
+            font-weight: bold;
+
+            color: var(--dark);
+        }
+
+        /* =========================
+           Status
+        ========================= */
+
+        .status {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            font-size: 15px;
+
+            font-weight: bold;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+
+            border-radius: 50%;
+
+            display: inline-block;
+        }
+
+        .running {
+            color: var(--success-dark);
+        }
+
+        .running .dot {
+            background: var(--success);
+
+            box-shadow:
+                0 0 0 4px rgba(22,163,74,.12);
+        }
+
+        .stopped {
+            color: var(--danger);
+        }
+
+        .stopped .dot {
+            background: var(--danger);
+
+            box-shadow:
+                0 0 0 4px rgba(220,38,38,.12);
+        }
+
+        .unknown {
+            color: var(--warning);
+        }
+
+        .unknown .dot {
+            background: var(--warning);
+        }
+
+        /* =========================
+           Section
+        ========================= */
+
+        .section {
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: 13px;
+
+            padding: 23px;
+
+            margin-bottom: 24px;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,.055);
+        }
+
+        .section-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            margin: 0;
+
+            font-size: 18px;
+
+            color: var(--dark);
+        }
+
+        .section-description {
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        /* =========================
+           Info Grid
+        ========================= */
+
+        .info-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 14px;
+        }
+
+        .info-item {
+            background: #f8fafc;
+
+            border: 1px solid #edf0f3;
+
+            border-radius: 9px;
+
+            padding: 15px;
+        }
+
+        .info-label {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            color: var(--dark);
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            word-break: break-word;
+        }
+
+        /* =========================
+           Storage
+        ========================= */
+
+        .storage {
+            margin-top: 22px;
+        }
+
+        .storage-bar {
+            width: 100%;
+
+            height: 18px;
+
+            background: #e5e7eb;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+        .storage-fill {
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #2563eb,
+                    #3b82f6
+                );
+
+            border-radius: 10px;
+
+            transition: width .4s;
+        }
+
+        .storage-info {
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-top: 9px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        /* =========================
+           Actions
+        ========================= */
+
+        .actions {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 12px;
+        }
+
+        .button {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            text-decoration: none;
+
+            color: white;
+
+            background: var(--primary);
+
+            padding: 12px 18px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            transition:
+                background .2s,
+                transform .2s;
+        }
+
+        .button:hover {
+            background: var(--primary-dark);
+
+            transform: translateY(-1px);
+        }
+
+        .button.green {
+            background: var(--success);
+        }
+
+        .button.green:hover {
+            background: var(--success-dark);
+        }
+
+        .button.gray {
+            background: #4b5563;
+        }
+
+        .button.gray:hover {
+            background: #374151;
+        }
+
+        /* =========================
+           Footer
+        ========================= */
+
+        .footer {
+            text-align: center;
+
+            color: #9ca3af;
+
+            font-size: 11px;
+
+            padding: 10px 0 25px;
+        }
+
+        /* =========================
+           Responsive
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .header {
+                padding: 15px 18px;
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .header-right {
+                width: 100%;
+
+                justify-content: space-between;
+            }
+
+            .container {
+                padding: 0 13px;
+
+                margin-top: 20px;
+            }
+
+            .page-title h2 {
+                font-size: 21px;
+            }
+
+            .section {
+                padding: 17px;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     Header
+========================= -->
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            ✉️
+        </div>
+
+        <div>
+
+            <h1>
+                مدیریت Mail Server
+            </h1>
+
+            <small>
+                سامانه مدیریت و مانیتورینگ سرویس ایمیل
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-right">
+
+        <div class="admin-badge">
+
+            👤
+            {{ admin_username }}
+
+        </div>
+
+
+        <a
+            class="logout"
+            href="{{ url_for('logout') }}"
+        >
+            خروج
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- =========================
+     Main
+========================= -->
+
+<main class="container">
+
+
+    <div class="page-title">
+
+        <h2>
+            داشبورد سیستم
+        </h2>
+
+        <p>
+            وضعیت لحظه‌ای Mail Server و سرویس‌های مرتبط
+        </p>
+
+    </div>
+
+
+    {% if error %}
+
+    <div class="error">
+
+        ⚠️
+        خطا در دریافت اطلاعات:
+
+        {{ error }}
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =========================
+         Status Cards
+    ========================= -->
+
+    <div class="cards">
+
+
+        <!-- Mail Server -->
+
+        <div class="card">
+
+            <div class="card-title">
+                Mail Server
+            </div>
+
+
+            {% if server.mailserver == "running" %}
+
+            <div class="status running">
+
+                <span class="dot"></span>
+
+                در حال اجرا
+
+            </div>
+
+            {% elif server.mailserver == "exited" %}
+
+            <div class="status stopped">
+
+                <span class="dot"></span>
+
+                متوقف
+
+            </div>
+
+            {% else %}
+
+            <div class="status unknown">
+
+                <span class="dot"></span>
+
+                {{ server.mailserver or "نامشخص" }}
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Roundcube -->
+
+        <div class="card">
+
+            <div class="card-title">
+                Roundcube
+            </div>
+
+
+            {% if server.roundcube == "running" %}
+
+            <div class="status running">
+
+                <span class="dot"></span>
+
+                در حال اجرا
+
+            </div>
+
+            {% else %}
+
+            <div class="status stopped">
+
+                <span class="dot"></span>
+
+                {{ server.roundcube or "نامشخص" }}
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Postfix -->
+
+        <div class="card">
+
+            <div class="card-title">
+                Postfix
+            </div>
+
+
+            {% if server.postfix == "running" %}
+
+            <div class="status running">
+
+                <span class="dot"></span>
+
+                در حال اجرا
+
+            </div>
+
+            {% else %}
+
+            <div class="status unknown">
+
+                <span class="dot"></span>
+
+                {{ server.postfix or "نامشخص" }}
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Dovecot -->
+
+        <div class="card">
+
+            <div class="card-title">
+                Dovecot
+            </div>
+
+
+            {% if server.dovecot == "running" %}
+
+            <div class="status running">
+
+                <span class="dot"></span>
+
+                در حال اجرا
+
+            </div>
+
+            {% else %}
+
+            <div class="status unknown">
+
+                <span class="dot"></span>
+
+                {{ server.dovecot or "نامشخص" }}
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Users -->
+
+        <div class="card">
+
+            <div class="card-title">
+                تعداد کاربران
+            </div>
+
+            <div class="card-value">
+
+                {{ server.user_count }}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         Mail Server Information
+    ========================= -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h3>
+                اطلاعات Mail Server
+            </h3>
+
+            <span class="section-description">
+                مشخصات سرویس
+            </span>
+
+        </div>
+
+
+        <div class="info-grid">
+
+
+            <div class="info-item">
+
+                <div class="info-label">
+                    نام میزبان
+                </div>
+
+                <div class="info-value">
+                    {{ server.hostname }}
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-label">
+                    دامنه
+                </div>
+
+                <div class="info-value">
+                    {{ server.domain }}
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-label">
+                    پروتکل‌های فعال
+                </div>
+
+                <div class="info-value">
+                    {{ server.protocols }}
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         Storage
+    ========================= -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h3>
+                فضای ذخیره‌سازی
+            </h3>
+
+            <span class="section-description">
+                وضعیت فضای Mail Server
+            </span>
+
+        </div>
+
+
+        {% if server.disk %}
+
+
+        <div class="info-grid">
+
+
+            <div class="info-item">
+
+                <div class="info-label">
+                    کل فضا
+                </div>
+
+                <div class="info-value">
+                    {{ server.disk.size }}
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-label">
+                    فضای مصرف‌شده
+                </div>
+
+                <div class="info-value">
+                    {{ server.disk.used }}
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-label">
+                    فضای آزاد
+                </div>
+
+                <div class="info-value">
+                    {{ server.disk.available }}
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-label">
+                    درصد مصرف
+                </div>
+
+                <div class="info-value">
+                    {{ server.disk.percentage }}
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        {% set disk_percent =
+            server.disk.percentage
+            |replace('%', '')
+            |int
+        %}
+
+
+        <div class="storage">
+
+            <div class="storage-bar">
+
+                <div
+                    class="storage-fill"
+                    style="width: {{ disk_percent }}%;"
+                ></div>
+
+            </div>
+
+
+            <div class="storage-info">
+
+                <span>
+                    مصرف:
+                    {{ server.disk.percentage }}
+                </span>
+
+                <span>
+                    آزاد:
+                    {{ server.disk.available }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        {% else %}
+
+        <p>
+            اطلاعات فضای ذخیره‌سازی در دسترس نیست.
+        </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =========================
+         Management Actions
+    ========================= -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h3>
+                مدیریت سیستم
+            </h3>
+
+            <span class="section-description">
+                دسترسی سریع
+            </span>
+
+        </div>
+
+
+        <div class="actions">
+
+
+            <a
+                class="button"
+                href="{{ url_for('users') }}"
+            >
+                👥
+                مدیریت کاربران
+            </a>
+
+
+            <a
+                class="button green"
+                href="http://127.0.0.1:8000"
+                target="_blank"
+            >
+                ✉️
+                ورود به Roundcube
+            </a>
+
+
+            <a
+                class="button gray"
+                href="{{ url_for('logout') }}"
+            >
+                خروج از سیستم
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+    <div class="footer">
+
+        Mail Server Administration Panel
+
+    </div>
+
+
+</main>
+
+
+</body>
+
+</html>
