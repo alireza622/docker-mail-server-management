@@ -533,7 +533,8 @@ mailserver/
     ├── login.JPG
     ├── dash.JPG
     ├── user.JPG
-    └── add-user.JPG
+    ├── add-user.JPG
+    └── email.JPG
 ```
 
 ---
@@ -730,27 +731,29 @@ mail.example.com.   A     YOUR.SERVER.IP
 
 Additional SPF, DKIM and DMARC configuration is recommended for production mail delivery.
 
----
-
 # 📸 Screenshots
 
-### Login
+The following screenshots demonstrate the main interfaces of the Mail Server Management System.
+
+### 🔐 Login
 
 ![Login](screenshots/login.JPG)
 
-### Dashboard
+### 📊 Dashboard
 
 ![Dashboard](screenshots/dash.JPG)
 
-### User Management
+### 👥 User Management
 
-![Users](screenshots/user.JPG)
+![User Management](screenshots/user.JPG)
 
-### Add User
+### ➕ Add User
 
 ![Add User](screenshots/add-user.JPG)
 
----
+### ✉️ Roundcube Webmail
+
+![Roundcube Webmail](screenshots/email.JPG)
 
 # 🧰 Technology Stack
 
